@@ -1,0 +1,57 @@
+{
+  "info": {
+    "name": "Afaq Hotel Booking API v1",
+    "description": "Authenticated hotel booking endpoints. Set base_url, api_token, hotel_id, and room_type_id before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{api_token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "api_token", "value": "" },
+    { "key": "hotel_id", "value": "1" },
+    { "key": "room_type_id", "value": "1" },
+    { "key": "booking_id", "value": "" },
+    { "key": "idempotency_key", "value": "booking-demo-001" }
+  ],
+  "item": [
+    {
+      "name": "Create booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Idempotency-Key", "value": "{{idempotency_key}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"hotel_id\": {{hotel_id}},\n  \"room_type_id\": {{room_type_id}},\n  \"check_in_date\": \"2026-10-10\",\n  \"check_out_date\": \"2026-10-12\",\n  \"rooms_count\": 1,\n  \"customer_name\": \"Ada Lovelace\",\n  \"customer_contact\": \"ada@example.test\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{base_url}}/api/v1/bookings"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "if (pm.response.code === 201) {",
+            "  pm.collectionVariables.set('booking_id', pm.response.json().data.id);",
+            "}"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "Cancel booking",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/api/v1/bookings/{{booking_id}}/cancel"
+      }
+    }
+  ]
+}
