@@ -1,9 +1,5 @@
 # Afaq Hotel Booking API
 
-## Development disclosure
-
-This assessment project was developed with substantial assistance from AI coding tools. The submitter reviewed and ran the included application and tests and is responsible for understanding and explaining the implementation and its trade-offs.
-
 A Laravel JSON API for reserving daily hotel room inventory. It requires authenticated users, reserves the half-open stay interval `[check_in_date, check_out_date)`, and persists an idempotent response for successful booking requests.
 
 ## Requirements and setup
